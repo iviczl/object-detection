@@ -9,14 +9,12 @@ const videos = [
 const VIDEO_EXTENSION = '.mp4'
 
 export function VideoSelector() {
-  console.log(currentVideo.value)
   const selectVideo = (value: string) => {
     currentVideo.value = {
       ...currentVideo.value,
       name: value,
       filePath: value ? value + VIDEO_EXTENSION : '',
     }
-    console.log(currentVideo.value)
   }
 
   return (

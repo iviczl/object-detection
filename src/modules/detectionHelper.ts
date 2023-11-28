@@ -25,9 +25,9 @@ export function transformedRects(
   const heightRate = height / videoHeight
   return rects.map((rect) => ({
     ...rect,
-    x: rect.x * widthRate,
-    y: rect.y * heightRate,
-    w: rect.w * widthRate,
-    h: rect.h * heightRate,
+    x: Math.round(rect.x * widthRate),
+    y: Math.round(rect.y * heightRate),
+    w: Math.round(rect.w * widthRate),
+    h: Math.round(rect.h * heightRate),
   }))
 }
