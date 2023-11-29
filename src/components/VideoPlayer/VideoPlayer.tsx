@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef } from 'react'
+import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react'
 import { computed } from '@preact/signals-react'
 import { PlayingState, currentVideo } from '../../state'
 import './VideoPlayer.css'
@@ -136,11 +136,6 @@ export function VideoPlayer({ children }: Props) {
           value={currentTime.value}
           step='.1'
           onChange={(e: ChangeEvent<HTMLInputElement>) => seek(e.target.value)}
-          disabled={
-            ![PlayingState.Paused, PlayingState.Playing].includes(
-              currentVideo.value.playingState
-            )
-          }
         />
         <label className='video-time'>
           {Math.round(currentTime.value * 10) / 10}
