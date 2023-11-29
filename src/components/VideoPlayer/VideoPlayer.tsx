@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef } from 'react'
 import { computed } from '@preact/signals-react'
 import { PlayingState, currentVideo } from '../../state'
 import './VideoPlayer.css'
