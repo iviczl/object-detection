@@ -115,7 +115,12 @@ export function VideoPlayer({ children }: Props) {
       </div>
       <div className='video-control'>
         <button
-          className='play-button'
+          className={
+            'play-button' +
+            (currentVideo.value.playingState === PlayingState.Playing
+              ? ' playing'
+              : '')
+          }
           onClick={playAction}
           disabled={
             ![PlayingState.Paused, PlayingState.Playing].includes(
@@ -123,9 +128,9 @@ export function VideoPlayer({ children }: Props) {
             )
           }
         >
-          {currentVideo.value.playingState === PlayingState.Playing
+          {/* {currentVideo.value.playingState === PlayingState.Playing
             ? 'Pause'
-            : 'Play'}
+            : 'Play'} */}
         </button>
         <input
           className='video-slider'
