@@ -9,9 +9,9 @@ type Props = {
 
 export function VideoPlayer({ children }: Props) {
   const player = useRef<HTMLVideoElement>(null)
-  const slider = useRef(null)
   const filePath = computed(() => currentVideo.value.filePath)
   const currentTime = computed(() => currentVideo.value.currentTime)
+  let slidingValue = currentTime.value
   const height = computed(() => currentVideo.value.height)
   const length = computed(() => currentVideo.value.length)
 
@@ -82,16 +82,19 @@ export function VideoPlayer({ children }: Props) {
     player.current?.pause()
   }
 
-  const seek = (value: string) => {
+  const seek = (value: number) => {
     if (!player.current) {
       return
     }
-    const numericValue = parseFloat(value)
-    player.current.currentTime = numericValue
+    player.current.currentTime = value
     currentVideo.value = {
       ...currentVideo.value,
-      currentTime: numericValue,
+      currentTime: value,
     }
+  }
+
+  const slide = () => {
+    seek(slidingValue)
   }
 
   return (
@@ -127,20 +130,20 @@ export function VideoPlayer({ children }: Props) {
               currentVideo.value.playingState
             )
           }
-        >
-          {/* {currentVideo.value.playingState === PlayingState.Playing
-            ? 'Pause'
-            : 'Play'} */}
-        </button>
+        ></button>
         <input
           className='video-slider'
           type='range'
-          ref={slider}
           min='0'
           max={length.value}
           value={currentTime.value}
           step='.1'
-          onChange={(e: ChangeEvent<HTMLInputElement>) => seek(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            slidingValue = parseFloat(e.target.value)
+          }}
+          onMouseUp={() => {
+            slide()
+          }}
         />
         <label className='video-time'>
           {Math.round(currentTime.value * 10) / 10}
