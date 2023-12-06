@@ -34,13 +34,13 @@
 
 .video-slider {
   flex-grow: 1;
+  cursor: pointer;
 }
-.video-slider:hover {
+/* .video-slider:hover {
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="6" fill="blue"></circle></svg>')
       6 6,
     auto;
-}
-/* cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><rect x="0" y="0" width="30" height="30" fill="red" /></svg>'), */
+} */
 
 .video-time {
   width: 50px;

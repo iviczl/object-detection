@@ -1,7 +1,8 @@
-import { ChangeEvent, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { computed } from '@preact/signals-react'
 import { PlayingState, currentVideo } from '../../state'
 import './VideoPlayer.css'
+import { Slider } from './Slider'
 
 type Props = {
   children?: JSX.Element
@@ -10,10 +11,7 @@ type Props = {
 export function VideoPlayer({ children }: Props) {
   const player = useRef<HTMLVideoElement>(null)
   const filePath = computed(() => currentVideo.value.filePath)
-  const currentTime = computed(() => currentVideo.value.currentTime)
-  let slidingValue = currentTime.value
   const height = computed(() => currentVideo.value.height)
-  const length = computed(() => currentVideo.value.length)
 
   // handles all the needed video element events
   function eventHandler(event: { type: string }) {
@@ -26,14 +24,9 @@ export function VideoPlayer({ children }: Props) {
             ? 0
             : player.current.duration
           break
-        case 'loadedmetadata':
+        case 'loadeddata':
           newValue.videoWidth = player.current.videoWidth
           newValue.videoHeight = player.current.videoHeight
-          newValue.length = Number.isNaN(player.current.duration)
-            ? 0
-            : player.current.duration
-          break
-        case 'loadeddata':
           newValue.currentTime = player.current.currentTime
           newValue.length = Number.isNaN(player.current.duration)
             ? 0
@@ -47,12 +40,6 @@ export function VideoPlayer({ children }: Props) {
           break
         case 'play':
           newValue.playingState = PlayingState.Playing
-          break
-        case 'seeking':
-          newValue.playingState = PlayingState.Seeking
-          break
-        case 'seeked':
-          newValue.playingState = PlayingState.Paused
           break
         case 'resize':
           newValue.width = player.current.clientWidth
@@ -93,10 +80,6 @@ export function VideoPlayer({ children }: Props) {
     }
   }
 
-  const slide = () => {
-    seek(slidingValue)
-  }
-
   return (
     <>
       <div className='screen-area' onClick={playAction}>
@@ -106,12 +89,9 @@ export function VideoPlayer({ children }: Props) {
           ref={player}
           src={filePath.value}
           onTimeUpdate={eventHandler}
-          onLoadedMetadata={eventHandler}
           onLoadedData={eventHandler}
           onPause={eventHandler}
           onPlay={eventHandler}
-          onSeeking={eventHandler}
-          onSeeked={eventHandler}
           onResize={eventHandler}
         ></video>
         {children}
@@ -131,23 +111,7 @@ export function VideoPlayer({ children }: Props) {
             )
           }
         ></button>
-        <input
-          className='video-slider'
-          type='range'
-          min='0'
-          max={length.value}
-          value={currentTime.value}
-          step='.1'
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            slidingValue = parseFloat(e.target.value)
-          }}
-          onMouseUp={() => {
-            slide()
-          }}
-        />
-        <label className='video-time'>
-          {Math.round(currentTime.value * 10) / 10}
-        </label>
+        <Slider video={currentVideo.value} onSlide={seek} />
       </div>
     </>
   )
